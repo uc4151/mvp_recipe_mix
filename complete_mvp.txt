@@ -1,0 +1,175 @@
+﻿Recipe Sharing Platform MVP Specification
+Recipe Mix - Share and discover amazing recipes from around the world.
+________________
+
+
+Architecture
+The architecture of our Recipe Sharing Platform MVP will follow a client-server model using Flask as the web framework. Below is an illustration of the architecture:  
+
+
+Flow of Data:
+1. Client Request: The user interacts with the front-end (HTML, CSS, JavaScript), making requests to the server.
+2. API Routes: Flask handles these requests via defined API routes.
+3. Business Logic: Flask processes these requests, interacting with the database through SQLAlchemy ORM.
+4. Database Operations: Data is fetched or stored in the SQLite (development) or PostgreSQL (production) database.
+5. Response: Flask sends the processed data back to the client for rendering.
+________________
+
+
+APIs and Methods
+Web Client to Web Server Communication:
+1. User Management
+   * /api/register
+      * POST: Registers a new user with username, email, and password.
+   * /api/login
+      * POST: Authenticates a user and starts a session.
+   * /api/logout
+      * POST: Logs out the current user and ends the session.
+   * /api/user
+      * GET: Returns the current user's information based on session id.
+2. Recipe Management
+   * /api/recipes
+      * GET: Returns a list of all recipes.
+      * POST: Creates a new recipe with title, ingredients, and instructions.
+   * /api/recipes/<int:id>
+      * GET: Returns details of a specific recipe.
+      * PUT: Updates a specific recipe.
+      * DELETE: Deletes a specific recipe.
+3. Comments and Ratings
+   * /api/recipes/<int:id>/comments
+      * POST: Adds a comment to a specific recipe.
+   * /api/recipes/<int:id>/ratings
+      * POST: Adds a rating to a specific recipe.
+Endpoints or Methods for Other Clients:
+Recipe Class
+class Recipe(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    ingredients = db.Column(db.Text, nullable=False)
+    instructions = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+* 3rd Party APIs: No external APIs will be used in the MVP version.
+________________
+
+
+Data Model
+The data model for the Recipe Sharing Platform MVP includes three main entities: Users, Recipes, and Comments.
+  
+
+________________
+
+
+User Stories
+User Story 1: As a user, I want to register an account so that I can submit and save my recipes.
+* Acceptance Criteria:
+   * A registration form with fields for username, email, and password.
+   * Validation and error messages for invalid inputs.
+   * Successful registration redirects to the user profile.
+User Story 2: As a user, I want to log in and log out of the platform so that I can access my recipes and profile.
+* Acceptance Criteria:
+   * A login form with fields for email and password.
+   * Validation and error messages for incorrect credentials.
+   * Successful login redirects to the user dashboard.
+   * A logout button that ends the session.
+User Story 3: As a user, I want to create, view, edit, and delete my recipes so that I can manage my culinary ideas.
+* Acceptance Criteria:
+   * A form for creating new recipes with fields for title, ingredients, and instructions.
+   * A view to display a list of all recipes.
+   * Edit and delete options for each recipe.
+   * Proper validation and feedback for actions performed.
+User Story 4: As a user, I want to comment on and rate other users' recipes so that I can share my feedback and suggestions.
+* Acceptance Criteria:
+   * A form to submit comments on recipes.
+   * A rating system to rate recipes on a scale of 1 to 5.
+   * Display comments and average rating on recipe pages.
+User Story 5: As a guest user, I want to browse and search for recipes without needing to register so that I can quickly find cooking inspiration.
+* Acceptance Criteria:
+   * Public access to the list of recipes and detailed recipe views.
+   * A search bar to filter recipes based on keywords.
+________________
+
+
+Mockups
+Home Page Mockup:
+Recipe List Mockup:
+Recipe Detail Mockup:
+________________
+
+
+Challenge
+Problem to Solve:
+* The Recipe Sharing Platform aims to provide a centralized place where users can share and discover recipes, interact with other users through comments and ratings, and manage their culinary collections.
+What It Will Not Solve:
+* The project will not address sourcing ingredients, providing nutritional information, or offering personalized dietary recommendations.
+Who It Will Help:
+* The primary users will be home cooks, food enthusiasts, and bloggers looking for a platform to share and discover new recipes.
+Locale Relevance:
+* The platform is designed to be used globally and is not dependent on any specific locale.
+________________
+
+
+Risks
+Technical Risks:
+* Risk: Data loss during deployment or database migrations.
+   * Impact: Could lead to loss of user data or service interruption.
+   * Safeguards: Regular backups, careful migration procedures, use of staging environments.
+* Risk: Security vulnerabilities.
+   * Impact: Could expose user data or compromise the application.
+   * Safeguards: Implement secure coding practices, use HTTPS, regularly update dependencies.
+Non-Technical Risks:
+* Risk: Team member unavailability.
+   * Impact: Could delay project milestones.
+   * Strategies: Maintain clear communication, redistribute tasks if necessary.
+* Risk: Scope creep.
+   * Impact: Could lead to an overly complex project, missed deadlines.
+   * Strategies: Clearly define project scope, prioritize features, and adhere to the timeline.
+________________
+
+
+Infrastructure
+Branching and Merging:
+* We will use GitHub flow: create feature branches, merge into the main branch via pull requests after code review.
+Deployment Strategy:
+* Deploy to Heroku using continuous integration (CI) with GitHub for automatic deployment on successful builds.
+Data Population:
+* Initially populate the database with sample recipes and user accounts for testing. Allow users to add data post-deployment.
+Testing Tools and Automation:
+* Use PyTest for unit testing, Selenium for integration testing. Automate testing with GitHub Actions for CI.
+________________
+
+
+Existing Solutions
+* AllRecipes: Offers extensive recipe database, ratings, and comments. Similarities: recipe submission, user interaction. Differences: AllRecipes has advanced search filters and a larger user base.
+* Epicurious: Provides professionally curated recipes, user ratings, and comments. Similarities: recipe discovery and user interaction. Differences: Epicurious focuses on professionally tested recipes.
+Reimplementation Decision:
+* Our project will focus on user-generated content with a simple and intuitive interface
+________________
+
+
+Progress and Challenges
+Progress
+Progress Rating:
+* On a scale of 1 to 10, how would you rate the progress you’ve made this week?
+   * Rating: 7
+Explanation of Progress Assessment:
+* This week we have successfully integrated the user management system, including registration, login, and logout functionalities. We also completed the recipe creation, viewing, editing, and deletion features. However, we are still working on implementing the commenting and rating system.
+Completed Parts:
+* User registration and authentication.
+* Recipe management (create, view, edit, delete).
+Incomplete Aspects:
+* Commenting and rating system.
+* Search functionality for recipes.
+Challenges
+Technical Challenge:
+* The most difficult technical challenge encountered this week was ensuring the security of user data during authentication and database operations. Implementing secure password storage using hashing algorithms and setting up the database to prevent SQL injection attacks required careful planning and testing. Additionally, configuring the environment variables correctly to work seamlessly in both development and production environments posed significant challenges. We had to ensure that sensitive information such as secret keys and database credentials were securely managed and not exposed in the codebase.
+Non-Technical Challenge:
+* The most difficult non-technical challenge encountered this week was coordinating tasks and communication within the team. With team members located in different time zones, scheduling meetings and ensuring everyone was on the same page proved challenging. To mitigate this, we implemented regular update meetings and used project management tools to track progress and assign tasks. Maintaining clear and consistent communication was crucial to ensure that all team members were aware of their responsibilities and deadlines, and any issues or roadblocks were promptly addressed.
+Screenshots
+*   
+
+
+
+   *   ________________
+
+
+This document combines the initial MVP specification with the new progress and challenges information, providing a comprehensive overview of the current state of the project.
